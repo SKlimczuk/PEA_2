@@ -19,5 +19,9 @@ private:
 public:
     Swap();
     ~Swap();
+    int getA();
+    int getB();
+    void setA(int a);
+    void setB(int b);
 };
 #endif /* Swap_hpp */

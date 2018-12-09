@@ -12,18 +12,21 @@
 #include <stdio.h>
 
 class TabuList {
-private:
+//private:
+public:
     int **tabuList;
     int size;
     int cadency;
-public:
+//public:
     TabuList();
     TabuList(int size);
     ~TabuList();
 
-    void addElement();
-    void removeElement();
+    void addElement(int a, int b);
+    void refreshTabuList();
     void resetTabuList();
+    
+    int** getTabuList();
     
 };
 #endif /* TabuList_hpp */

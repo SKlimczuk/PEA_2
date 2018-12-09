@@ -14,3 +14,19 @@ Swap::Swap(){
 }
 
 Swap::~Swap(){}
+
+int Swap::getA(){
+    return this->a;
+}
+
+int Swap::getB(){
+    return this->b;
+}
+
+void Swap::setA(int a){
+    this->a = a;
+}
+
+void Swap::setB(int b){
+    this->b = b;
+}

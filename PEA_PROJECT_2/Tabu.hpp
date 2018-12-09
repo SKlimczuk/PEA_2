@@ -19,6 +19,7 @@
 #include <sstream>
 
 #include "TabuList.hpp"
+#include "Swap.hpp"
 
 using namespace std;
 
@@ -30,10 +31,10 @@ private:
     int **graph;
     //sciezka i waga optymalnego rozwiazania
     int *bestPath;
-    int bestScore;
+    int bestCost;
     //sciezka i waga optymalnego rozwiazania tymczasowego
     int *tempBestPath;
-    int tempBestScore;
+    int tempBestCost;
     //lista tabu
     TabuList *tabuList;
  
@@ -49,6 +50,8 @@ public:
     int *setTempBestPath();
     
     void swap(int x, int y);
+    
+    Swap findBestSwap();
 };
 
 #endif /* Tabu_hpp */
