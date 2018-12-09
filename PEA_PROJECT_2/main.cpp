@@ -1,8 +1,8 @@
 //
 //  main.cpp
-//  PEA_PROJECT_1
+//  PEA_PROJECT_2
 //
-//  Created by Szymon Klimczuk on 20/10/2018.
+//  Created by Szymon Klimczuk on 09/12/2018.
 //  Copyright © 2018 Szymon Klimczuk. All rights reserved.
 //
 
@@ -22,9 +22,8 @@ int main(int argc, const char * argv[]) {
     
     Tabu *tabu = nullptr;
     
-    string MAIN_MENU = "\n-----MENU-----\n1-read data from file\n2-display matrix\n3-tabu search alghoritm\n0-exit\nCHOICE: ";
+    string MAIN_MENU = "\n-----MENU-----\n1-read data from file\n2-display graph\n3-tabu search alghoritm\n0-exit\nCHOICE: ";
     string FILE_MENU = "\ninsert file name: ";
-    string TSP_FAIL = "\ngraph is not initialized !\n";
     
     int choice;
     
@@ -55,10 +54,16 @@ int main(int argc, const char * argv[]) {
             } break;
             case 3:
             {
+                if(tabu != nullptr)
+                    tabu->tabuAlgorithm();
+                else
+                    cout << endl << "GRAPH IS NOT INITIALIZED" << endl;
             } break;
             case 0:
             {
                 //exit
+                if(tabu != nullptr)
+                    tabu->~Tabu();
                 menuFlowCondition = false;
             } break;
             default:
