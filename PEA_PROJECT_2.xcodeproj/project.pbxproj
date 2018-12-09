@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F764C8C21BD37B90000817A /* Tabu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2F764C8A21BD37B90000817A /* Tabu.cpp */; };
 		2F91E28D21B5C2BB005A09DB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2F91E28C21B5C2BB005A09DB /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +24,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2F764C8A21BD37B90000817A /* Tabu.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Tabu.cpp; sourceTree = "<group>"; };
+		2F764C8B21BD37B90000817A /* Tabu.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Tabu.hpp; sourceTree = "<group>"; };
 		2F91E28921B5C2BB005A09DB /* PEA_PROJECT_2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PEA_PROJECT_2; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F91E28C21B5C2BB005A09DB /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,6 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				2F91E28C21B5C2BB005A09DB /* main.cpp */,
+				2F764C8A21BD37B90000817A /* Tabu.cpp */,
+				2F764C8B21BD37B90000817A /* Tabu.hpp */,
 			);
 			path = PEA_PROJECT_2;
 			sourceTree = "<group>";
@@ -119,6 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F91E28D21B5C2BB005A09DB /* main.cpp in Sources */,
+				2F764C8C21BD37B90000817A /* Tabu.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
