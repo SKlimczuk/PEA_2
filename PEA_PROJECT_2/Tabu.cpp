@@ -34,9 +34,7 @@ Tabu::Tabu(string filename){
                 graph[i][k] = weight;
             }
         }
-        
         file.close();
-        
         cout << "\nCITIES:" << cities << endl;
     }
 }
@@ -56,37 +54,69 @@ void Tabu::displayGraph(){
     }
 }
 
-void Tabu::tabuAlgorithm(){
+void Tabu::tabuAlgorithm(string finalCriteria, int num){
     tempBestPath = new int[cities];
     bestPath = new int[cities];
     tabuList = new TabuList(cities);
     bestCost = INT_MAX;
     Swap bestSwap;
+    bool isTimeExceeded = false;
     
-    //tymczasowe kryterium zakonczenia
-    //TODO: zastanowic sie jak je pozniej ustalac zaleznie od problemu
-    int iterationsCriteria = 10000000;
-    
-    //losowa sciezka startowa i jej przypisanie jako optymalna
-    tempBestPath = setTempBestPath();
-    bestPath = setBestPath();
-    
-    //glowna petla algorytmu zalezna od kryterium koncowego
-    for(int i = 0; i < iterationsCriteria; i++)
-    {
-        //funkcja oceny wartosci ruchu
-        bestSwap = findBestSwap();
-        swap(bestSwap.getA(),bestSwap.getB());
-        //porowananiu wynikow
-        if(calculateCost(graph, tempBestPath, cities) < bestCost){
-            bestCost = calculateCost(graph, tempBestPath, cities);
-            bestPath = setBestPath();
-        }
+    //kryterium zakonczenia
+    if(finalCriteria == "ITER"){
+        auto start = chrono::system_clock::now();
         
-        if(bestSwap.getA() != 0 && bestSwap.getB() != 0){
-            tabuList->addElement(bestSwap.getA(), bestSwap.getB());
-            tabuList->refreshTabuList();
+        //losowa sciezka startowa i jej przypisanie jako optymalna
+        tempBestPath = setTempBestPath();
+        bestPath = setBestPath();
+        
+        //glowna petla algorytmu zalezna od kryterium koncowego
+        for(int i = 0; i < num; i++)
+        {
+            //funkcja oceny wartosci ruchu
+            bestSwap = findBestSwap();
+            swap(bestSwap.getA(),bestSwap.getB());
+            //porowananiu wynikow
+            if(calculateCost(graph, tempBestPath, cities) < bestCost){
+                bestCost = calculateCost(graph, tempBestPath, cities);
+                bestPath = setBestPath();
+            }
+            
+            if(bestSwap.getA() != 0 && bestSwap.getB() != 0){
+                tabuList->addElement(bestSwap.getA(), bestSwap.getB());
+                tabuList->refreshTabuList();
+            }
         }
+        auto stop = chrono::system_clock::now();
+        chrono::duration<double, milli> elapsed_miliseconds = stop-start;
+        cout << "TIME : " << elapsed_miliseconds.count() << " [ms]" << endl;
+    }
+    else if(finalCriteria == "TIME"){
+        clock_t start = clock();
+        //losowa sciezka startowa i jej przypisanie jako optymalna
+        tempBestPath = setTempBestPath();
+        bestPath = setBestPath();
+        
+        //glowna petla algorytmu zalezna od kryterium koncowego
+        do{
+            //funkcja oceny wartosci ruchu
+            bestSwap = findBestSwap();
+            swap(bestSwap.getA(),bestSwap.getB());
+            //porowananiu wynikow
+            if(calculateCost(graph, tempBestPath, cities) < bestCost){
+                bestCost = calculateCost(graph, tempBestPath, cities);
+                bestPath = setBestPath();
+            }
+            
+            if(bestSwap.getA() != 0 && bestSwap.getB() != 0){
+                tabuList->addElement(bestSwap.getA(), bestSwap.getB());
+                tabuList->refreshTabuList();
+            }
+            
+            clock_t elapsed = (clock()-start);
+            if(elapsed/CLOCKS_PER_SEC >= num)
+                isTimeExceeded = true;
+        }while(isTimeExceeded == false);
     }
     displayResult(bestPath, cities, bestCost);
     

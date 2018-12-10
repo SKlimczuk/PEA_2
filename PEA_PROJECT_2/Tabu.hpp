@@ -37,6 +37,10 @@ private:
     int tempBestCost;
     //lista tabu
     TabuList *tabuList;
+    //warunek koncowy
+    string finalCriteria;
+    //ilosc iteracji/sekund zaleznie od finalCriteria
+    int number;
  
 public:
     Tabu();
@@ -44,7 +48,7 @@ public:
     ~Tabu();
     
     void displayGraph();
-    void tabuAlgorithm();
+    void tabuAlgorithm(string finalCriteria, int num);
     
     int *setBestPath();
     int *setTempBestPath();
