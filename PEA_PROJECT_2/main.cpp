@@ -11,6 +11,7 @@
 #include <chrono>
 
 #include "Tabu.hpp"
+#include "Annealing.hpp"
 
 using namespace std;
 
@@ -21,8 +22,9 @@ vector<string> initVectorWithSimulationFiles();
 int main(int argc, const char * argv[]) {
     
     Tabu *tabu = nullptr;
+    Annealing *annealing = nullptr;
     
-    string MAIN_MENU = "\n-----MENU-----\n1-read data from file\n2-display graph\n3-tabu search alghoritm\n0-exit\nCHOICE: ";
+    string MAIN_MENU = "\n-----MENU-----\n1-read data from file\n2-display graph\n3-tabu search alghoritm\n4-simulated annealing alhorithm\n0-exit\nCHOICE: ";
     string FILE_MENU = "\ninsert file name: ";
     string TIME_CRITERIA = "TIME";
     string ITER_CRITERIA = "ITER";
@@ -36,7 +38,7 @@ int main(int argc, const char * argv[]) {
         do {
             cout << MAIN_MENU;
             cin >> choice;
-        } while(0 > choice || choice > 3 );
+        } while(0 > choice || choice > 4);
         
         switch (choice) {
             case 1:
@@ -46,6 +48,7 @@ int main(int argc, const char * argv[]) {
                 cout << FILE_MENU;
                 cin >> filename;
                 tabu = new Tabu(filename);
+                annealing = new Annealing(filename);
             } break;
             case 2:
             {
@@ -87,11 +90,30 @@ int main(int argc, const char * argv[]) {
                 else
                     cout << endl << "GRAPH IS NOT INITIALIZED" << endl;
             } break;
+            case 4:
+            {
+                if(annealing != nullptr){
+                    double temperatureMax;
+                    double temperatureMin;
+                    do{
+                        cout << "-----TEMPERATURE-----" << endl;
+                        cout << "pass min temperature: ";
+                        cin >> temperatureMin;
+                        cout << "pass max temperature: ";
+                        cin >> temperatureMax;
+                    }while (temperatureMax <= temperatureMin);
+                    annealing->simulatedAnnealingAlgorithm(temperatureMax, temperatureMin);
+                }
+                else
+                    cout << endl << "GRAPH IS NOT INITIALIZED" << endl;
+            } break;
             case 0:
             {
                 //exit
                 if(tabu != nullptr)
                     tabu->~Tabu();
+                if(annealing != nullptr)
+                    annealing->~Annealing();
                 menuFlowCondition = false;
             } break;
             default:

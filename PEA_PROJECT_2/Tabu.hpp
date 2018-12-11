@@ -10,7 +10,6 @@
 #define Tabu_hpp
 
 #include <stdio.h>
-#include <stdio.h>
 #include <iomanip>
 #include <iostream>
 #include <fstream>

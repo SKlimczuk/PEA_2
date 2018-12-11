@@ -151,7 +151,7 @@ Swap Tabu::findBestSwap(){
     int bestSwapCost = INT_MAX;
     
     for (int x = 1; x < cities; x++) {
-        for (int y = 1; y < cities; y++) {
+        for (int y = 2; y < cities; y++) {
             if(x != y){
                 swap(x, y);
                 tempBestCost = calculateCost(graph, tempBestPath, cities);
