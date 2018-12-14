@@ -38,6 +38,10 @@ void TabuList::refreshTabuList(){
         for(int k = 0; k < size; k++){
             if(tabuList[i][k] > 0)
                 tabuList[i][k] -= 1;
+            if(tabuList[i][k] == 0)
+                cadency -= 2;
+            if(cadency == 2)
+                cadency = 10;
         }
 }
 

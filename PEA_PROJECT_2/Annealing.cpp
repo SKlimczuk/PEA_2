@@ -55,10 +55,12 @@ void Annealing::simulatedAnnealingAlgorithm(double temperatureMax, double temper
     tempBestPath = new int[cities];
     bestPath = new int[cities];
     bestCost = INT_MAX;
-    
+        
     //losowa sciezka startowa i jej przypisanie jako optymalna
     tempBestPath = setTempBestPath();
     bestPath = setBestPath();
+    
+    auto start = chrono::system_clock::now();
     
     while(temperatureMax > temperatureMin){
         int *temp = generateRandomSwap(tempBestPath);
@@ -71,6 +73,10 @@ void Annealing::simulatedAnnealingAlgorithm(double temperatureMax, double temper
         }
         temperatureMax = temperatureMax*0.95;
     }
+    
+    auto stop = chrono::system_clock::now();
+    chrono::duration<double, milli> elapsed_miliseconds = stop-start;
+    cout << "TIME : " << elapsed_miliseconds.count() << " [ms]" << endl;
     displayResultSA(bestPath, cities, bestCost);
     
     delete[] tempBestPath;
@@ -94,10 +100,14 @@ int* Annealing::setTempBestPath(){
 int* Annealing::generateRandomSwap(int *path){
     int randomA;
     int randomB;
+    
+    int* tempArr = new int[cities];
+    for(int i = 0; i < cities; i++)
+        tempArr[i] = path[i];
     do{
-        randomA = rand() % cities;
-        randomB = rand() % cities;
-    } while (randomA == randomB && randomA != 0 && randomB != 0);
+        randomA = rand() % (cities - 1) + 1;
+        randomB = rand() % (cities - 1) + 1;
+    } while (randomA == randomB);
     
     double temp = path[randomA];
     path[randomA] = path[randomB];

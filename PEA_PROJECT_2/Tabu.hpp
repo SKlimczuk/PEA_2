@@ -55,6 +55,8 @@ public:
     void swap(int x, int y);
     
     Swap findBestSwap();
+    
+    void diversification();
 };
 
 #endif /* Tabu_hpp */

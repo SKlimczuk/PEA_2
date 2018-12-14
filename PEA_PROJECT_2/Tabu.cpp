@@ -62,6 +62,8 @@ void Tabu::tabuAlgorithm(string finalCriteria, int num){
     Swap bestSwap;
     bool isTimeExceeded = false;
     
+    int diversificationCounter = 0;
+    
     //kryterium zakonczenia
     if(finalCriteria == "ITER"){
         auto start = chrono::system_clock::now();
@@ -80,6 +82,13 @@ void Tabu::tabuAlgorithm(string finalCriteria, int num){
             if(calculateCost(graph, tempBestPath, cities) < bestCost){
                 bestCost = calculateCost(graph, tempBestPath, cities);
                 bestPath = setBestPath();
+                diversificationCounter = 0;
+            } else {
+                diversificationCounter++;
+                if(diversificationCounter == cities){
+                    diversification();
+                    diversificationCounter = 0;
+                }
             }
             
             if(bestSwap.getA() != 0 && bestSwap.getB() != 0){
@@ -106,16 +115,23 @@ void Tabu::tabuAlgorithm(string finalCriteria, int num){
             if(calculateCost(graph, tempBestPath, cities) < bestCost){
                 bestCost = calculateCost(graph, tempBestPath, cities);
                 bestPath = setBestPath();
+                diversificationCounter = 0;
+            } else {
+                diversificationCounter++;
+                if(diversificationCounter == cities){
+                    diversification();
+                    diversificationCounter = 0;
+                }
+                
+                if(bestSwap.getA() != 0 && bestSwap.getB() != 0){
+                    tabuList->addElement(bestSwap.getA(), bestSwap.getB());
+                    tabuList->refreshTabuList();
+                }
+                
+                clock_t elapsed = (clock()-start);
+                if(elapsed/CLOCKS_PER_SEC >= num)
+                    isTimeExceeded = true;
             }
-            
-            if(bestSwap.getA() != 0 && bestSwap.getB() != 0){
-                tabuList->addElement(bestSwap.getA(), bestSwap.getB());
-                tabuList->refreshTabuList();
-            }
-            
-            clock_t elapsed = (clock()-start);
-            if(elapsed/CLOCKS_PER_SEC >= num)
-                isTimeExceeded = true;
         }while(isTimeExceeded == false);
     }
     displayResult(bestPath, cities, bestCost);
@@ -125,70 +141,103 @@ void Tabu::tabuAlgorithm(string finalCriteria, int num){
     delete[] tempBestPath;
     delete[] bestPath;
 }
-
-int* Tabu::setBestPath(){
-    for(int i = 0; i < cities; i++)
-        bestPath[i] = tempBestPath[i];
-    return bestPath;
-}
-
-int* Tabu::setTempBestPath(){
-    tempBestPath[0] = 0;
-    tempBestPath[cities] = 0;
-    for(int i = 1; i < cities; i++)
-        tempBestPath[i] = i;
-    return tempBestPath;
-}
-
-void Tabu::swap(int x, int y){
-    int tmp = tempBestPath[x];
-    tempBestPath[x] = tempBestPath[y];
-    tempBestPath[y] = tmp;
-}
-
-Swap Tabu::findBestSwap(){
-    Swap bestSwap;
-    int bestSwapCost = INT_MAX;
     
-    for (int x = 1; x < cities; x++) {
-        for (int y = 2; y < cities; y++) {
-            if(x != y){
-                swap(x, y);
-                tempBestCost = calculateCost(graph, tempBestPath, cities);
-                if(tabuList->tabuList[bestSwap.getA()][bestSwap.getB()] == 0 && (tempBestCost-bestCost) < bestSwapCost){
-                    bestSwapCost = tempBestCost - bestCost;
-                    bestSwap.setA(x);
-                    bestSwap.setB(y);
-                }
-            }
-            swap(y,x);
+    int* Tabu::setBestPath(){
+        for(int i = 0; i < cities; i++)
+            bestPath[i] = tempBestPath[i];
+        return bestPath;
+    }
+    
+    int* Tabu::setTempBestPath(){
+        
+        int randomA;
+        int randomB;
+        
+        do{
+            randomA = rand() % (cities - 1) + 1;
+            randomB = rand() % (cities - 1) + 1;;
+        }while (randomA == randomB);
+        
+        for(int i = 0; i < cities; i++){
+            tempBestPath[i] = i;
         }
+        
+        swap(randomA, randomB);
+        
+        tempBestPath[0] = 0;
+        tempBestPath[cities] = 0;
+        
+        return tempBestPath;
     }
-    return bestSwap;
-}
-
-//----------------------------------------------class methods
-int** initializeMatrix(int **matrix, int limit)
-{
-    for(int i = 0; i < limit; i++){
-        matrix[i] = new int[limit];
-        for(int k = 0; k < limit; k++)
-            matrix[i][k] = 0;
+    
+    void Tabu::swap(int x, int y){
+        int tmp = tempBestPath[x];
+        tempBestPath[x] = tempBestPath[y];
+        tempBestPath[y] = tmp;
     }
-    return matrix;
-}
-
-int calculateCost(int** graph, int* arr, int limit){
-    int sum = 0;
-    for(int i = 0; i < limit; i++)
-        sum += graph[arr[i]][arr[i+1]];
-    return sum;
-}
-
-void displayResult(int* arr, int limit, int cost){
-    cout << "\nCOST: " << cost << endl;
-    cout << "PATH: ";
-    for(int i = 0; i < limit; i++)
-        cout << setw(2) << arr[i] << " ->";
-    cout << setw(3) << arr[limit] << endl;
-}
+    
+    Swap Tabu::findBestSwap(){
+        Swap bestSwap;
+        int bestSwapCost = INT_MAX;
+        
+        for (int x = 1; x < cities; x++) {
+            for (int y = 2; y < cities; y++) {
+                if(x != y){
+                    swap(x, y);
+                    tempBestCost = calculateCost(graph, tempBestPath, cities);
+                    if(tabuList->tabuList[bestSwap.getA()][bestSwap.getB()] == 0 && (tempBestCost-bestCost) < bestSwapCost){
+                        bestSwapCost = tempBestCost - bestCost;
+                        bestSwap.setA(x);
+                        bestSwap.setB(y);
+                    }
+                }
+                swap(y,x);
+            }
+        }
+        return bestSwap;
+    }
+    
+    void Tabu::diversification(){
+        int randomA;
+        int randomB;
+        
+        do{
+            randomA = rand() % (cities - 1) + 1;
+            randomB = rand() % (cities - 1) + 1;;
+        }while (randomA == randomB);
+        
+        for(int i = 0; i < cities; i++){
+            tempBestPath[i] = i;
+        }
+        
+        swap(randomA, randomB);
+        tabuList->resetTabuList();
+        tempBestPath[0] = 0;
+        tempBestPath[cities] = 0;
+    }
+    
+    //----------------------------------------------class methods
+    int** initializeMatrix(int **matrix, int limit)
+    {
+        for(int i = 0; i < limit; i++){
+            matrix[i] = new int[limit];
+            for(int k = 0; k < limit; k++)
+                matrix[i][k] = 0;
+        }
+        return matrix;
+    }
+    
+    int calculateCost(int** graph, int* arr, int limit){
+        int sum = 0;
+        for(int i = 0; i < limit; i++)
+            sum += graph[arr[i]][arr[i+1]];
+        return sum;
+    }
+    
+    void displayResult(int* arr, int limit, int cost){
+        cout << "\nCOST: " << cost << endl;
+        cout << "PATH: ";
+        for(int i = 0; i < limit; i++)
+            cout << setw(2) << arr[i] << " ->";
+        cout << setw(3) << arr[limit] << endl;
+    }

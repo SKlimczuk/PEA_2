@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
+#include <cstdlib>
 
 #include "Tabu.hpp"
 #include "Annealing.hpp"
@@ -20,6 +21,8 @@ void simulation(string filename, int cities);
 vector<string> initVectorWithSimulationFiles();
 
 int main(int argc, const char * argv[]) {
+    
+     srand(time( NULL ));
     
     Tabu *tabu = nullptr;
     Annealing *annealing = nullptr;
