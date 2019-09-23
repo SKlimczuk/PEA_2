@@ -77,10 +77,10 @@ int main(int argc, const char * argv[]) {
                                 tabu->tabuAlgorithm(ITER_CRITERIA, numOfIterations);
                             }break;
                             case 2:{
-                                int numOfseconds;
+                                int numOfSeconds;
                                 cout << "number of seconds: ";
-                                cin >> numOfseconds;
-                                tabu->tabuAlgorithm(TIME_CRITERIA, numOfseconds);
+                                cin >> numOfSeconds;
+                                tabu->tabuAlgorithm(TIME_CRITERIA, numOfSeconds);
                             }break;
                             case 0:{
                                 menuCriteriaFlowCondition = false;

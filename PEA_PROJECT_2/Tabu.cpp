@@ -169,7 +169,7 @@ void Tabu::tabuAlgorithm(string finalCriteria, int num){
         
         return tempBestPath;
     }
-    
+
     void Tabu::swap(int x, int y){
         int tmp = tempBestPath[x];
         tempBestPath[x] = tempBestPath[y];
